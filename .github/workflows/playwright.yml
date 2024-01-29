@@ -8,6 +8,10 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shardTotal: [1/6, 2/6, 3/6]
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
@@ -18,7 +22,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-      run: npx playwright test
+      run: npx playwright test --shard=${{ matrix.shardIndex }}
     - uses: actions/upload-artifact@v3
       if: always()
       with:
